@@ -22,6 +22,15 @@ class CerealStoreTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(isset($store['test']));
 		unset($store['test']);
 		$this->assertFalse(isset($store['test']));
+
+		// follow php's numeric key behaviour
+		$store['1'] = 'test';
+		$this->assertEquals('test', $store['1']);
+		$this->assertEquals('test', $store[1]);
+
+		$store[1] = 'test2';
+		$this->assertEquals('test2', $store['1']);
+		$this->assertEquals('test2', $store[1]);
 	}
 
 	/**
@@ -123,7 +132,7 @@ class CerealStoreTest extends PHPUnit_Framework_TestCase {
 	 * Test addArray()
 	 */
 	public function testAddArray() {
-		$data = array('one' => 1, 'two' => 2, 'three' => 3);
+		$data = array('one' => 1, 'two' => 2, 'three' => 3, 4 => 4);
 
 		$store = new CerealStore();
 		$store->addArray($data);
@@ -161,7 +170,7 @@ class CerealStoreTest extends PHPUnit_Framework_TestCase {
 	 * and accepting a serialized string in the constructor
 	 */
 	public function testSerialization() {
-		$data = array('one' => 1, 'two' => 2, 'three' => 3);
+		$data = array('one' => 1, 'two' => 2, 'three' => 3, 4 => 4);
 
 		$store = new CerealStore();
 		$store->addArray($data);

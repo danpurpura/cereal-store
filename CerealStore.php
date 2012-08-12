@@ -139,7 +139,7 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 		// try to unserialize the data, if anything fails set the store to an empty
 		// array
 		if ($store = json_decode(gzinflate(base64_decode($data)))) {
-			$this->store = (array)$store;
+			$this->store = $this->objectToArray($store);
 		} else {
 			$this->store = array();
 		}
@@ -149,6 +149,42 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 	
 	public function __toString() {
 		return $this->serialize($this);
+	}
+
+	/**
+	 * @internal
+	 *
+	 * fixKey() - applies formatting to the key as necessary
+	 *
+	 * This is required to mimic php's behavour where $a[1] === $a['1']
+	 *
+	 * @param mixed
+	 *
+	 * @return mixed - if the key is an interger value, casts to an int,
+	 * otherwise it returns the key as it
+	 */
+	protected function fixKey($key) {
+		return (is_numeric($key) && intval($key) == $key ? intval($key) : $key);
+	}
+
+	/**
+	 * @internal
+	 *
+	 * objectToArray() - converts an object to an associative array
+	 *
+	 * We can't just cast the object because JSON encoding/decoding may
+	 * have turned our numeric keys into strings, which really confuses php.
+	 *
+	 * @param object
+	 *
+	 * @return array
+	 */
+	protected function objectToArray($object) {
+		$array = array();
+		foreach((array)$object as $key => $value) {
+			$array[$this->fixKey($key)] = $value;
+		}
+		return $array;
 	}
 
 	// Iterator
@@ -179,6 +215,8 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 
 	// Array Access
     public function offsetSet($key, $value) {
+	    $key = $this->fixKey($key);
+
         if (is_null($key)) {
             $this->store[] = $value;
         } else {
@@ -189,6 +227,7 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
     }
 
     public function offsetExists($key) {
+	    $key = $this->fixKey($key);
 	    // isset works in all cases except when the value is null,
 	    // so fallback to array_key_exists in that case
 	    // this offers a slight performance gain over just using array_key_exists
@@ -196,11 +235,13 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
     }
 
     public function offsetUnset($key) {
+	    $key = $this->fixKey($key);
         unset($this->store[$key]);
 		return $this;
     }
 
     public function offsetGet($key) {
+	    $key = $this->fixKey($key);
         return (isset($this->store[$key]) ? $this->store[$key] : null);
     }
 }
