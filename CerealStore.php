@@ -33,6 +33,15 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 	}
 
 	/**
+	 * create() - static method to create an instance, useful for chainability
+	 *
+	 * @return CerealStore
+	 */
+	public static function create() {
+		return new self();
+	}
+
+	/**
 	 * add() - adds value to store
 	 *
 	 * @param string - key

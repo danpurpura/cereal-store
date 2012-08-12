@@ -189,4 +189,12 @@ class CerealStoreTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($string, (string)$store3);
 	}
 
+	/**
+	 * Tests ::create() and chainability
+	 */
+	public function testCreate() {
+		// create, add, and check that it exists
+		$this->assertTrue(CerealStore::create()->add('key', 'value')->has('key'));
+	}
+
 }
