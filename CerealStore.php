@@ -45,7 +45,7 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
     }
 
     public function offsetExists($key) {
-        return isset($this->store[$key]);
+        return isset($this->store[$key]) || array_key_exists($key, $this->store);
     }
 
     public function offsetUnset($key) {
