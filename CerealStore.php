@@ -54,6 +54,20 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 	}
 
 	/**
+	 * addArray() - adds keys and values from array to the store
+	 *
+	 * @param array
+	 *
+	 * @return $this
+	 */
+	public function addArray($data) {
+		foreach($data as $key => $value) {
+			$this->add($key, $value);
+		}
+		return $this;
+	}
+
+	/**
 	 * get() - returns the value for the given key
 	 *
 	 * @param string - key
@@ -87,17 +101,12 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 	}
 
 	/**
-	 * addArray() - adds keys and values from array to the store
+	 * isEmpty() - returns whether the store contains any data
 	 *
-	 * @param array
-	 *
-	 * @return $this
+	 * @return bool - returns true if there's no data in the store
 	 */
-	public function addArray($data) {
-		foreach($data as $key => $value) {
-			$this->add($key, $value);
-		}
-		return $this;
+	public function isEmpty() {
+		return count($this->store) == 0;
 	}
 
 	/**

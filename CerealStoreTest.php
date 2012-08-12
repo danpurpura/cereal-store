@@ -140,6 +140,23 @@ class CerealStoreTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test isEmpty()
+	 */
+	public function testIsEmpty() {
+		$store = new CerealStore();
+		// new store should be empty
+		$this->assertTrue($store->isEmpty());
+
+		// add a value => not empty
+		$store->add('key', 'value');
+		$this->assertFalse($store->isEmpty());
+
+		// remove a value => empty
+		$store->remove('key');
+		$this->assertTrue($store->isEmpty());
+	}
+
+	/**
 	 * Tests serialize(), unserialize(), __toString()
 	 * and accepting a serialized string in the constructor
 	 */
