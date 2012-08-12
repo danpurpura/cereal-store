@@ -1,6 +1,6 @@
 <?php
 
-class CerealStore implements Iterator, ArrayAccess {
+class CerealStore implements Iterator, ArrayAccess, Countable {
 
 	protected $store = array();
 
@@ -28,6 +28,10 @@ class CerealStore implements Iterator, ArrayAccess {
 
 	public function valid() {
 		return key($this->store) !== null;
+	}
+
+	public function count() {
+		return count($this->store);
 	}
 
     public function offsetSet($key, $value) {
