@@ -33,7 +33,7 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 	}
 
 	/**
-	 * create() - static method to create an instance, useful for chainability
+	 * create() - static method to create an instance, useful for chaining
 	 *
 	 * @return CerealStore
 	 */
@@ -110,7 +110,7 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 	}
 
 	/**
-	 * serialize() - returns the contents of the store as base64 encoded string
+	 * serialize() - returns the contents of the store as a base64 encoded string
 	 *
 	 * The store is JSON encoded, GZ deflated, and then base64 encoded.
 	 *
@@ -130,7 +130,7 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 	 * @return $this
 	 */
 	public function unserialize($data) {
-		// if received an object, replace it with the string
+		// if passed an object, call toString on it
 		// this allows us to do $store->unserialize($store2)
 		if (is_object($data)) {
 			$data = $data->__toString();
@@ -161,7 +161,7 @@ class CerealStore implements Iterator, ArrayAccess, Countable {
 	 * @param mixed
 	 *
 	 * @return mixed - if the key is an interger value, casts to an int,
-	 * otherwise it returns the key as it
+	 * otherwise it returns the key as is
 	 */
 	protected function fixKey($key) {
 		return (is_numeric($key) && intval($key) == $key ? intval($key) : $key);
